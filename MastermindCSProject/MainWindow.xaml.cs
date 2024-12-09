@@ -57,7 +57,6 @@ namespace MastermindCSProject
         private int attempts = 1;
         private DispatcherTimer timer;
         private int startTime;
-        private bool isGameOver = false;
         private int score = 100;
         private Color[] colors = { Colors.White, Colors.Red, Colors.Blue, Colors.Green, Colors.Yellow, Colors.Orange };
         private int[] colorIndex = { 0, 0, 0, 0 };
@@ -172,11 +171,10 @@ namespace MastermindCSProject
 
             else
             {
-                isGameOver = true;
                 highscores.Add($"Naam: {currentPlayer.Name} - Aantal pogingen: {currentPlayer.Attempts} - Score: {currentPlayer.Score}");
-
-                MessageBox.Show("Game Over! De correcte code was: " + color1 + " " + color2 + " " + color3 + " " + color4, "Game Over!", MessageBoxButton.OK, MessageBoxImage.Exclamation);
-                ResetGame();
+                string nextPlayerName = players[(playerIndex + 1) % players.Count].Name;
+                MessageBox.Show($"Game Over! De correcte code was: {color1} - {color2} - {color3} - {color4}\nVolgende speler: {nextPlayerName}", currentPlayer.Name, MessageBoxButton.OK, MessageBoxImage.Exclamation);
+                NextPlayer();
                 
             }
 
@@ -213,6 +211,12 @@ namespace MastermindCSProject
             attemptsList.Clear();
             attemptsListBox.ItemsSource = null;
             StartCountdown();
+        }
+
+        private void NextPlayer()
+        {
+            playerIndex = (playerIndex + 1) % players.Count;
+            ResetGame();
         }
 
         /// <summary>
@@ -458,9 +462,9 @@ namespace MastermindCSProject
             //Dit gebeurt door de Boolean allCorrect. Als alle kleuren correct zijn, blijft deze true en wordt het spel beeindigt.
             if (allCorrect)
             {
-                isGameOver = true;
                 highscores.Add($"Naam: {currentPlayer.Name} - Aantal pogingen: {currentPlayer.Attempts} - Score: {currentPlayer.Score}");
-                MessageBox.Show("Gefeliciteerd! Je hebt de code geraden! Score: " + score + " Pogingen: " + attempts, "Gewonnen!");
+                string nextPlayerName = players[(playerIndex + 1) % players.Count].Name;
+                MessageBox.Show($"Gefeliciteerd, {currentPlayer.Name}! Je hebt de code geraden! Score: {currentPlayer.Score} Pogingen: {currentPlayer.Attempts}\r\n Volgende speler: {nextPlayerName}", currentPlayer.Name);
                 StopTimer();
             }
             else if (attempts < maxAttempts)
