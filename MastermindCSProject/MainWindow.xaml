@@ -1,0 +1,80 @@
+﻿<Window x:Class="MastermindCSProject.MainWindow" Loaded="Window_Loaded"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:MastermindCSProject"
+        mc:Ignorable="d"
+        Title="Mastermind" Height="450" Width="800" KeyDown="ToggleDebug" Closing="Window_Closing">
+
+    <Window.Resources>
+        <DataTemplate x:Key="AttemptTemplate">
+            <StackPanel Orientation="Horizontal" Margin="5">
+                <Border BorderBrush="{Binding Color1BorderBrush}" BorderThickness="{Binding Color1BorderThickness}" CornerRadius="50" Width="30" Height="30" Margin="5">
+                    <Ellipse Fill="{Binding ChosenColor1}" Width="20" Height="20"/>
+                </Border>
+                <Border BorderBrush="{Binding Color2BorderBrush}" BorderThickness="{Binding Color2BorderThickness}" CornerRadius="50" Width="30" Height="30" Margin="5">
+                    <Ellipse Fill="{Binding ChosenColor2}" Width="20" Height="20"/>
+                </Border>
+                <Border BorderBrush="{Binding Color3BorderBrush}" BorderThickness="{Binding Color3BorderThickness}" CornerRadius="50" Width="30" Height="30" Margin="5">
+                    <Ellipse Fill="{Binding ChosenColor3}" Width="20" Height="20"/>
+                </Border>
+                <Border BorderBrush="{Binding Color4BorderBrush}" BorderThickness="{Binding Color4BorderThickness}" CornerRadius="50" Width="30" Height="30" Margin="5">
+                    <Ellipse Fill="{Binding ChosenColor4}" Width="20" Height="20"/>
+                </Border>
+            </StackPanel>
+        </DataTemplate>
+    </Window.Resources>
+    <Window.Background>
+        <ImageBrush ImageSource="/Mastermind_Background.jpeg"/>
+    </Window.Background>
+
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="5*"/>
+            <ColumnDefinition Width="3*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Menu x:Name="HoofdMenu" HorizontalAlignment="Left" VerticalAlignment="Top">
+            <MenuItem Header="Bestand">
+                <MenuItem x:Name="NewGame" Header="Nieuw Spel" Click="Window_Loaded">
+                </MenuItem>
+                <MenuItem x:Name="HighScores" Header="High Scores" Click="HighScores_Click">
+                </MenuItem>
+                <MenuItem x:Name="Close" Header="Afsluiten" Click="Close_Click">
+                </MenuItem>
+            </MenuItem>
+            <MenuItem Header="Instellingen">
+                <MenuItem x:Name="AttemptsAmount" Header="Aantal Pogingen" Click="AantalPogingen_Click">
+                </MenuItem>
+            </MenuItem>
+        </Menu>
+
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,70,0,0" Grid.Column="0" Grid.Row="0">
+            <Border x:Name="color1Border" BorderBrush="Black" BorderThickness="1" CornerRadius="55" Padding="0" Margin="5">
+                <Ellipse x:Name="color1Ellipse" Height="90" Width="90" Fill="White" MouseLeftButtonDown="Ellipse_MouseLeftButtonDown"/>
+            </Border>
+            <Border x:Name="color2Border" BorderBrush="Black" BorderThickness="1" CornerRadius="55" Padding="0" Margin="5">
+                <Ellipse x:Name="color2Ellipse" Height="90" Width="90" Fill="White" MouseLeftButtonDown="Ellipse_MouseLeftButtonDown"/>
+            </Border>
+            <Border x:Name="color3Border" BorderBrush="Black" BorderThickness="1" CornerRadius="55" Padding="0" Margin="5">
+                <Ellipse x:Name="color3Ellipse" Height="90" Width="90" Fill="White" MouseLeftButtonDown="Ellipse_MouseLeftButtonDown"/>
+            </Border>
+            <Border x:Name="color4Border" BorderBrush="Black" BorderThickness="1" CornerRadius="55" Padding="0" Margin="5">
+                <Ellipse x:Name="color4Ellipse" Height="90" Width="90" Fill="White" MouseLeftButtonDown="Ellipse_MouseLeftButtonDown"/>
+            </Border>
+        </StackPanel>
+
+        <ListBox x:Name="attemptsListBox" ItemTemplate="{StaticResource AttemptTemplate}" HorizontalAlignment="Left" Height="414" VerticalAlignment="Center" Width="215" Margin="56,0,0,0" Background="{x:Null}" Grid.Column="1" BorderBrush="White"/>
+        <Button x:Name="checkCodeButton" Content="Check code" HorizontalAlignment="Left" Margin="10,189,0,0" VerticalAlignment="Top" Width="408" Height="40" Click="checkCodeButton_Click" FontFamily="Impact" Foreground="White" FontSize="20" Background="Black"/>
+        <TextBox x:Name="secretCodeTextBox" HorizontalAlignment="Left" Margin="10,249,0,0" VerticalAlignment="Top" Width="408" Height="60" IsEnabled="False" SelectionOpacity="-1" FontSize="14" TextWrapping="Wrap" FontFamily="Impact" Visibility="Hidden"/>
+        <Label x:Name="timerLabel" Content="Timer:" HorizontalAlignment="Left" VerticalAlignment="Top" Width="350" Height="30" Foreground="White" FontFamily="Impact" FontSize="18" Margin="115,30,0,0"/>
+        <Label x:Name="scoreLabel" Content="Score: 100" HorizontalAlignment="Left" Margin="10,30,0,0" VerticalAlignment="Top" Foreground="White" FontFamily="Impact" FontSize="18"/>
+    </Grid>
+
+</Window>
