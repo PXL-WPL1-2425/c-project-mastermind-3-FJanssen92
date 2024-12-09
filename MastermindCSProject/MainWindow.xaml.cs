@@ -79,7 +79,6 @@ namespace MastermindCSProject
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             StartGame();
-            inputName = players[playerIndex].Name;
             StartCountdown();
 
         }
@@ -97,7 +96,7 @@ namespace MastermindCSProject
             }
             while (string.IsNullOrEmpty(name));
             players.Add(new Player(name));
-
+            playerNameLabel.Content = "Speler: " + players[playerIndex].Name;
             while (true)
             {
                 MessageBoxResult result = MessageBox.Show("Wilt u nog een speler toevoegen?", "Extra Speler Toevoegen", MessageBoxButton.YesNo, MessageBoxImage.Question);
@@ -111,6 +110,7 @@ namespace MastermindCSProject
                     players.Add(new Player(name));
                 }
             }
+
         }
 
         
@@ -162,10 +162,10 @@ namespace MastermindCSProject
             if (currentPlayer.Attempts < maxAttempts)
             {
                 currentPlayer.Attempts++;
-                Title = $"Mastermind - Poging: {attempts}";
+                Title = $"Mastermind - Poging: {currentPlayer.Attempts}";
                 timerLabel.Content = "Tijd is op! Beurt verloren!";
                 currentPlayer.Score -= 8;
-                scoreLabel.Content = "Score: " + score;
+                scoreLabel.Content = "Score: " + currentPlayer.Score;
                 StartCountdown();
             }
 
@@ -174,6 +174,7 @@ namespace MastermindCSProject
                 highscores.Add($"Naam: {currentPlayer.Name} - Aantal pogingen: {currentPlayer.Attempts} - Score: {currentPlayer.Score}");
                 string nextPlayerName = players[(playerIndex + 1) % players.Count].Name;
                 MessageBox.Show($"Game Over! De correcte code was: {color1} - {color2} - {color3} - {color4}\nVolgende speler: {nextPlayerName}", currentPlayer.Name, MessageBoxButton.OK, MessageBoxImage.Exclamation);
+                scoreLabel.Content = "Score: 100";
                 NextPlayer();
                 
             }
@@ -191,7 +192,7 @@ namespace MastermindCSProject
             currentPlayer.Score = 100;
             RandomColors(out color1, out color2, out color3, out color4);
             secretCodeTextBox.Text = $"Kleur 1: {color1}, Kleur 2: {color2}, Kleur 3:{color3}, Kleur 4:{color4}";
-            Title = $"Mastermind - Poging: {attempts}";
+            Title = $"Mastermind - Poging: {currentPlayer.Attempts}";
             timerLabel.Content = "Timer: 10";
 
             color1Ellipse.Fill = Brushes.White;
@@ -216,6 +217,7 @@ namespace MastermindCSProject
         private void NextPlayer()
         {
             playerIndex = (playerIndex + 1) % players.Count;
+            playerNameLabel.Content = "Speler: " + players[playerIndex].Name;
             ResetGame();
         }
 
@@ -418,14 +420,14 @@ namespace MastermindCSProject
                     {
                         targetBorder.BorderBrush = Brushes.Wheat;
                         targetBorder.BorderThickness = new Thickness(5);
-                        score -= 1;
+                        currentPlayer.Score -= 1;
                         allCorrect = false;
                     }
                     else
                     {
                         targetBorder.BorderBrush = Brushes.Transparent;
                         targetBorder.BorderThickness = new Thickness(5);
-                        score -= 2;
+                        currentPlayer.Score -= 2;
                         allCorrect = false;
                     }
 
@@ -465,12 +467,14 @@ namespace MastermindCSProject
                 highscores.Add($"Naam: {currentPlayer.Name} - Aantal pogingen: {currentPlayer.Attempts} - Score: {currentPlayer.Score}");
                 string nextPlayerName = players[(playerIndex + 1) % players.Count].Name;
                 MessageBox.Show($"Gefeliciteerd, {currentPlayer.Name}! Je hebt de code geraden! Score: {currentPlayer.Score} Pogingen: {currentPlayer.Attempts}\r\n Volgende speler: {nextPlayerName}", currentPlayer.Name);
-                StopTimer();
+                scoreLabel.Content = "Score: 100";
+                NextPlayer();
             }
-            else if (attempts < maxAttempts)
+            else if (currentPlayer.Attempts < maxAttempts && currentPlayer.Score >= 0)
             {
-                attempts++;
-                this.Title = $"Mastermind - Poging: {attempts}";
+                currentPlayer.Attempts++;
+                this.Title = $"Mastermind - Poging: {currentPlayer.Attempts}";
+                scoreLabel.Content = "Score: " + currentPlayer.Score;
                 StartCountdown();
             }
             else
@@ -478,7 +482,6 @@ namespace MastermindCSProject
                 StopTimer();
             }
 
-            scoreLabel.Content = "Score: " + score;
 
         }
     }

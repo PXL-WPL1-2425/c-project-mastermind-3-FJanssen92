@@ -40,20 +40,23 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <Menu x:Name="HoofdMenu" HorizontalAlignment="Left" VerticalAlignment="Top">
-            <MenuItem Header="Bestand">
-                <MenuItem x:Name="NewGame" Header="Nieuw Spel" Click="Window_Loaded">
+        <DockPanel VerticalAlignment="Top" Grid.ColumnSpan="2">
+            <Menu x:Name="HoofdMenu">
+                <MenuItem Header="Bestand">
+                    <MenuItem x:Name="NewGame" Header="Nieuw Spel" Click="Window_Loaded">
+                    </MenuItem>
+                    <MenuItem x:Name="HighScores" Header="High Scores" Click="HighScores_Click">
+                    </MenuItem>
+                    <MenuItem x:Name="Close" Header="Afsluiten" Click="Close_Click">
+                    </MenuItem>
                 </MenuItem>
-                <MenuItem x:Name="HighScores" Header="High Scores" Click="HighScores_Click">
+                <MenuItem Header="Instellingen">
+                    <MenuItem x:Name="AttemptsAmount" Header="Aantal Pogingen" Click="AantalPogingen_Click">
+                    </MenuItem>
                 </MenuItem>
-                <MenuItem x:Name="Close" Header="Afsluiten" Click="Close_Click">
-                </MenuItem>
-            </MenuItem>
-            <MenuItem Header="Instellingen">
-                <MenuItem x:Name="AttemptsAmount" Header="Aantal Pogingen" Click="AantalPogingen_Click">
-                </MenuItem>
-            </MenuItem>
-        </Menu>
+            </Menu>
+        </DockPanel>
+
 
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,70,0,0" Grid.Column="0" Grid.Row="0">
             <Border x:Name="color1Border" BorderBrush="Black" BorderThickness="1" CornerRadius="55" Padding="0" Margin="5">
@@ -70,11 +73,12 @@
             </Border>
         </StackPanel>
 
-        <ListBox x:Name="attemptsListBox" ItemTemplate="{StaticResource AttemptTemplate}" HorizontalAlignment="Left" Height="414" VerticalAlignment="Center" Width="215" Margin="56,0,0,0" Background="{x:Null}" Grid.Column="1" BorderBrush="White"/>
+        <ListBox x:Name="attemptsListBox" ItemTemplate="{StaticResource AttemptTemplate}" HorizontalAlignment="Left" Height="388" VerticalAlignment="Center" Width="215" Margin="56,0,0,0" Background="{x:Null}" Grid.Column="1" BorderBrush="White"/>
         <Button x:Name="checkCodeButton" Content="Check code" HorizontalAlignment="Left" Margin="10,189,0,0" VerticalAlignment="Top" Width="408" Height="40" Click="checkCodeButton_Click" FontFamily="Impact" Foreground="White" FontSize="20" Background="Black"/>
         <TextBox x:Name="secretCodeTextBox" HorizontalAlignment="Left" Margin="10,249,0,0" VerticalAlignment="Top" Width="408" Height="60" IsEnabled="False" SelectionOpacity="-1" FontSize="14" TextWrapping="Wrap" FontFamily="Impact" Visibility="Hidden"/>
         <Label x:Name="timerLabel" Content="Timer:" HorizontalAlignment="Left" VerticalAlignment="Top" Width="350" Height="30" Foreground="White" FontFamily="Impact" FontSize="18" Margin="115,30,0,0"/>
         <Label x:Name="scoreLabel" Content="Score: 100" HorizontalAlignment="Left" Margin="10,30,0,0" VerticalAlignment="Top" Foreground="White" FontFamily="Impact" FontSize="18"/>
+        <Label x:Name="playerNameLabel" Content="Speler: " HorizontalAlignment="Left" Margin="10,234,0,0" VerticalAlignment="Top" Width="408" Height="45" FontFamily="Impact" FontSize="18" Foreground="White" VerticalContentAlignment="Center"/>
     </Grid>
 
 </Window>
