@@ -97,6 +97,7 @@ namespace MastermindCSProject
             while (string.IsNullOrEmpty(name));
             players.Add(new Player(name));
             playerNameLabel.Content = "Speler: " + players[playerIndex].Name;
+
             while (true)
             {
                 MessageBoxResult result = MessageBox.Show("Wilt u nog een speler toevoegen?", "Extra Speler Toevoegen", MessageBoxButton.YesNo, MessageBoxImage.Question);
@@ -104,6 +105,7 @@ namespace MastermindCSProject
                 {
                     break;
                 }
+
                 name = Interaction.InputBox("Naam nieuwe speler: ", "Speler Toevoegen");
                 if (!string.IsNullOrEmpty(name))
                 {
@@ -288,10 +290,117 @@ namespace MastermindCSProject
             if (!int.TryParse(input, out maxAttempts) || maxAttempts <3 || maxAttempts > 20)
             {
                 MessageBox.Show("Geef een getal in tussen 3 en 20!", "Ongeldige invoer", MessageBoxButton.OK, MessageBoxImage.Error);
+            }  
+        }
+
+        /// <summary>
+        /// Er wordt gevraagd aan de speler of hij een hint wilt kopen, op basis van de selectie wordt de juiste methode uitgevoerd.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void buyHintButton_Click(object sender, RoutedEventArgs e)
+        {
+            MessageBoxResult result = MessageBox.Show("Wilt u een hint kopen voor zowel de kleur en de locatie? (Yes, -25 punten) of alleen de kleur? (No, -15 punten)", "Hint Kopen", MessageBoxButton.YesNoCancel, MessageBoxImage.Question);
+
+            if (result == MessageBoxResult.Yes)
+            {
+                BuyHintColorLocation();
             }
-            
-            
-            
+            else if (result == MessageBoxResult.No)
+            {
+                BuyHintColor();
+            }
+        }
+
+
+        /// <summary>
+        /// De methode geeft een hint aan de speler.
+        /// Er wordt een willekeurige index gekozen en een eerste check wordt gedaan om te kijken als de speler de kleur op deze index al juist heeft gekozen.
+        /// Als dit niet het geval is, wordt gekeken of de kleur op een andere index wel voorkomt. Er wordt een hint voorzien aan de speler waarin de kleur staat, maar niet de positie.
+        /// </summary>
+        private void BuyHintColor()
+        {
+            Player currentPlayer = players[playerIndex];
+
+            List<Brush> generatedColors = new List<Brush>
+            { new SolidColorBrush((Color)ColorConverter.ConvertFromString(color1)),
+              new SolidColorBrush((Color)ColorConverter.ConvertFromString(color2)),
+              new SolidColorBrush((Color)ColorConverter.ConvertFromString(color3)),
+              new SolidColorBrush((Color)ColorConverter.ConvertFromString(color4))
+            };
+
+            List<Brush> chosenColors = new List<Brush> {
+                color1Ellipse.Fill,
+                color2Ellipse.Fill,
+                color3Ellipse.Fill,
+                color4Ellipse.Fill };
+
+            Random random = new Random();
+            int randomIndex;
+            bool hintGiven = false;
+
+            while (!hintGiven)
+            {
+                randomIndex = random.Next(0, 4);
+                //Er wordt gekeken of de kleur op de willelkeurige index al juist is gekozen. 
+                if (((SolidColorBrush)chosenColors[randomIndex]).Color != ((SolidColorBrush)generatedColors[randomIndex]).Color)
+                {
+                    //Als dit niet het geval is, wordt gekeken of de kleur op een andere index wel voorkomt. Dit gebeurt door een for loop doorheen de index van de geheime code.
+                    for (int i = 0; i < 4; i++)
+                    {
+                        //Als de kleur op een andere index wel voorkomt, wordt er een hint gegeven aan de speler.
+                        if (randomIndex != i && ((SolidColorBrush)chosenColors[randomIndex]).Color == ((SolidColorBrush)generatedColors[i]).Color)
+                        {     
+                            MessageBox.Show($"Hint: Kleur {generatedColors[randomIndex].ToString()} is een van de kleuren!");
+                            //De score wordt aangepast en de hintGiven wordt op true gezet zodat de while loop stopt.
+                            currentPlayer.Score -= 15;
+                            scoreLabel.Content = "Score: " + currentPlayer.Score;
+                            hintGiven = true;
+                            //De break; zorgt ervoor dat de loop stopt zodra er een hint is gegeven.
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// De methode geeft een hint aan de speler.
+        /// Er wordt een willekeure index gegenereerd en wordt vergeleken met de gegenereerde kleuren.
+        /// Dit blijft herhaald worden totdat er een verschil is tussen de gekozen en gegenereerde kleuren, zodat de hint niet al een kleur geeft die de speler al juist heeft.
+        /// Vervolgens wordt de hint weergegeven. Zowel de kleur als de locatie.
+        /// </summary>
+        private void BuyHintColorLocation()
+        {
+            Player currentPlayer = players[playerIndex];
+
+            List<Brush> generatedColors = new List<Brush>
+            { new SolidColorBrush((Color)ColorConverter.ConvertFromString(color1)),
+              new SolidColorBrush((Color)ColorConverter.ConvertFromString(color2)),
+              new SolidColorBrush((Color)ColorConverter.ConvertFromString(color3)),
+              new SolidColorBrush((Color)ColorConverter.ConvertFromString(color4))
+            };
+
+            List<Brush> chosenColors = new List<Brush> {
+                color1Ellipse.Fill,
+                color2Ellipse.Fill,
+                color3Ellipse.Fill,
+                color4Ellipse.Fill };
+
+            Random random = new Random();
+            int randomIndex;
+
+            //Er wordt een willekeurige index gekozen en gekeken of de kleur op deze index al juist is gekozen.
+            do
+            {
+                randomIndex = random.Next(0, 4);
+            } while (((SolidColorBrush)chosenColors[randomIndex]).Color == ((SolidColorBrush)generatedColors[randomIndex]).Color);
+
+            //Als de kleur op de willekeurige index niet juist is gekozen, wordt de hint weergegeven.
+            MessageBox.Show($"Hint: Kleur {randomIndex + 1} is {generatedColors[randomIndex].ToString()}.");
+            currentPlayer.Score -= 25;
+            scoreLabel.Content = "Score: " + currentPlayer.Score;
+
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
