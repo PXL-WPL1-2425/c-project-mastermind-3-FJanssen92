@@ -52,34 +52,31 @@ namespace MastermindCSProject
             }
         }
 
-        private List<Attempt> attemptsList;
-        private string color1, color2, color3, color4;
-        private int attempts = 1;
-        private DispatcherTimer timer;
-        private int startTime;
-        private int score = 100;
-        private Color[] colors = { Colors.White, Colors.Red, Colors.Blue, Colors.Green, Colors.Yellow, Colors.Orange };
-        private int[] colorIndex = { 0, 0, 0, 0 };
-        private string inputName;
-        private List<string> highscores = new List<string>();
-        private int maxAttempts = 10;
-        private List<Player> players = new List<Player>();
-        private int playerIndex = 0;
+        private List<Attempt> _attemptsList;
+        private string _color1, _color2, _color3, _color4;
+        private DispatcherTimer _timer;
+        private int _startTime;
+        private Color[] _colors = { Colors.White, Colors.Red, Colors.Blue, Colors.Green, Colors.Yellow, Colors.Orange };
+        private int[] _colorIndex = { 0, 0, 0, 0 };
+        private List<string> _highscores = new List<string>();
+        private int _maxAttempts = 10;
+        private List<Player> _players = new List<Player>();
+        private int _playerIndex = 0;
 
         public MainWindow()
         {
             InitializeComponent();
-            attemptsList = new List<Attempt>();
-            timer = new DispatcherTimer();
-            RandomColors(out color1, out color2, out color3, out color4);
-            secretCodeTextBox.Text = $"Kleur 1: {color1}, Kleur 2: {color2}, Kleur 3:{color3}, Kleur 4:{color4}";
-            Title = $"Mastermind - Poging: {attempts}";
+            _attemptsList = new List<Attempt>();
+            _timer = new DispatcherTimer();
+            RandomColors(out _color1, out _color2, out _color3, out _color4);
+            secretCodeTextBox.Text = $"Kleur 1: {_color1}, Kleur 2: {_color2}, Kleur 3:{_color3}, Kleur 4:{_color4}";
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             StartGame();
             StartCountdown();
+            Title = $"Mastermind - Poging: {_players[_playerIndex].Attempts}";
 
         }
 
@@ -95,8 +92,8 @@ namespace MastermindCSProject
                 name = Interaction.InputBox("Geef uw naam in.", "Speler Naam");
             }
             while (string.IsNullOrEmpty(name));
-            players.Add(new Player(name));
-            playerNameLabel.Content = "Speler: " + players[playerIndex].Name;
+            _players.Add(new Player(name));
+            playerNameLabel.Content = "Speler: " + _players[_playerIndex].Name;
 
             while (true)
             {
@@ -109,7 +106,7 @@ namespace MastermindCSProject
                 name = Interaction.InputBox("Naam nieuwe speler: ", "Speler Toevoegen");
                 if (!string.IsNullOrEmpty(name))
                 {
-                    players.Add(new Player(name));
+                    _players.Add(new Player(name));
                 }
             }
 
@@ -123,11 +120,11 @@ namespace MastermindCSProject
         /// </summary>
         private void StartCountdown()
         {
-            startTime = 10;
-            timer.Interval = TimeSpan.FromSeconds(1);
-            timer.Tick -= Timer_Tick;
-            timer.Tick += Timer_Tick;
-            timer.Start();
+            _startTime = 10;
+            _timer.Interval = TimeSpan.FromSeconds(1);
+            _timer.Tick -= Timer_Tick;
+            _timer.Tick += Timer_Tick;
+            _timer.Start();
         }
 
 
@@ -139,10 +136,10 @@ namespace MastermindCSProject
         /// <param name="e"></param>
         private void Timer_Tick(object? sender, EventArgs e)
         {
-            if (startTime >= 0)
+            if (_startTime >= 0)
             {
-                timerLabel.Content = "Timer: " + startTime.ToString();
-                startTime--;
+                timerLabel.Content = "Timer: " + _startTime.ToString();
+                _startTime--;
             }
             else
             {
@@ -158,10 +155,10 @@ namespace MastermindCSProject
         /// </summary>
         private void StopTimer()
         {
-            timer.Stop();
-            Player currentPlayer = players[playerIndex];
+            _timer.Stop();
+            Player currentPlayer = _players[_playerIndex];
 
-            if (currentPlayer.Attempts < maxAttempts)
+            if (currentPlayer.Attempts < _maxAttempts)
             {
                 currentPlayer.Attempts++;
                 Title = $"Mastermind - Poging: {currentPlayer.Attempts}";
@@ -173,9 +170,9 @@ namespace MastermindCSProject
 
             else
             {
-                highscores.Add($"Naam: {currentPlayer.Name} - Aantal pogingen: {currentPlayer.Attempts} - Score: {currentPlayer.Score}");
-                string nextPlayerName = players[(playerIndex + 1) % players.Count].Name;
-                MessageBox.Show($"Game Over! De correcte code was: {color1} - {color2} - {color3} - {color4}\nVolgende speler: {nextPlayerName}", currentPlayer.Name, MessageBoxButton.OK, MessageBoxImage.Exclamation);
+                _highscores.Add($"Naam: {currentPlayer.Name} - Aantal pogingen: {currentPlayer.Attempts} - Score: {currentPlayer.Score}");
+                string nextPlayerName = _players[(_playerIndex + 1) % _players.Count].Name;
+                MessageBox.Show($"Game Over! De correcte code was: {_color1} - {_color2} - {_color3} - {_color4}\nVolgende speler: {nextPlayerName}", currentPlayer.Name, MessageBoxButton.OK, MessageBoxImage.Exclamation);
                 scoreLabel.Content = "Score: 100";
                 NextPlayer();
                 
@@ -189,11 +186,11 @@ namespace MastermindCSProject
         /// </summary>
         private void ResetGame()
         {
-            Player currentPlayer = players[playerIndex];
+            Player currentPlayer = _players[_playerIndex];
             currentPlayer.Attempts = 1;
             currentPlayer.Score = 100;
-            RandomColors(out color1, out color2, out color3, out color4);
-            secretCodeTextBox.Text = $"Kleur 1: {color1}, Kleur 2: {color2}, Kleur 3:{color3}, Kleur 4:{color4}";
+            RandomColors(out _color1, out _color2, out _color3, out _color4);
+            secretCodeTextBox.Text = $"Kleur 1: {_color1}, Kleur 2: {_color2}, Kleur 3:{_color3}, Kleur 4:{_color4}";
             Title = $"Mastermind - Poging: {currentPlayer.Attempts}";
             timerLabel.Content = "Timer: 10";
 
@@ -211,15 +208,15 @@ namespace MastermindCSProject
             color4Border.BorderBrush = Brushes.Black;
             color4Border.BorderThickness = new Thickness(1);
 
-            attemptsList.Clear();
+            _attemptsList.Clear();
             attemptsListBox.ItemsSource = null;
             StartCountdown();
         }
 
         private void NextPlayer()
         {
-            playerIndex = (playerIndex + 1) % players.Count;
-            playerNameLabel.Content = "Speler: " + players[playerIndex].Name;
+            _playerIndex = (_playerIndex + 1) % _players.Count;
+            playerNameLabel.Content = "Speler: " + _players[_playerIndex].Name;
             ResetGame();
         }
 
@@ -263,8 +260,8 @@ namespace MastermindCSProject
             else if (ellipse == color3Ellipse) index = 2;
             else if (ellipse == color4Ellipse) index = 3;
 
-            colorIndex[index] = (colorIndex[index] + 1) % colors.Length;
-            ellipse.Fill = new SolidColorBrush(colors[colorIndex[index]]);
+            _colorIndex[index] = (_colorIndex[index] + 1) % _colors.Length;
+            ellipse.Fill = new SolidColorBrush(_colors[_colorIndex[index]]);
         }
 
         private void Close_Click(object sender, RoutedEventArgs e)
@@ -276,7 +273,7 @@ namespace MastermindCSProject
         {
             StringBuilder sb = new StringBuilder();
 
-            foreach (string highscore in highscores)
+            foreach (string highscore in _highscores)
             {
                 sb.AppendLine(highscore);
             }
@@ -287,7 +284,7 @@ namespace MastermindCSProject
         private void AantalPogingen_Click(object sender, RoutedEventArgs e)
         {
             string input = Interaction.InputBox("Geef het maximum aantal pogingen in.", "Aantal Pogingen");
-            if (!int.TryParse(input, out maxAttempts) || maxAttempts <3 || maxAttempts > 20)
+            if (!int.TryParse(input, out _maxAttempts) || _maxAttempts <3 || _maxAttempts > 20)
             {
                 MessageBox.Show("Geef een getal in tussen 3 en 20!", "Ongeldige invoer", MessageBoxButton.OK, MessageBoxImage.Error);
             }  
@@ -320,13 +317,13 @@ namespace MastermindCSProject
         /// </summary>
         private void BuyHintColor()
         {
-            Player currentPlayer = players[playerIndex];
+            Player currentPlayer = _players[_playerIndex];
 
             List<Brush> generatedColors = new List<Brush>
-            { new SolidColorBrush((Color)ColorConverter.ConvertFromString(color1)),
-              new SolidColorBrush((Color)ColorConverter.ConvertFromString(color2)),
-              new SolidColorBrush((Color)ColorConverter.ConvertFromString(color3)),
-              new SolidColorBrush((Color)ColorConverter.ConvertFromString(color4))
+            { new SolidColorBrush((Color)ColorConverter.ConvertFromString(_color1)),
+              new SolidColorBrush((Color)ColorConverter.ConvertFromString(_color2)),
+              new SolidColorBrush((Color)ColorConverter.ConvertFromString(_color3)),
+              new SolidColorBrush((Color)ColorConverter.ConvertFromString(_color4))
             };
 
             List<Brush> chosenColors = new List<Brush> {
@@ -335,6 +332,16 @@ namespace MastermindCSProject
                 color3Ellipse.Fill,
                 color4Ellipse.Fill };
 
+            Dictionary<Color, string> colorNames = new Dictionary<Color, string>
+            {
+                { Colors.White, "White" },
+                { Colors.Red, "Red" },
+                { Colors.Blue, "Blue" },
+                { Colors.Green, "Green" },
+                { Colors.Yellow, "Yellow" },
+                { Colors.Orange, "Orange" }
+            };
+
             Random random = new Random();
             int randomIndex;
             bool hintGiven = false;
@@ -342,21 +349,17 @@ namespace MastermindCSProject
             while (!hintGiven)
             {
                 randomIndex = random.Next(0, 4);
-                //Er wordt gekeken of de kleur op de willelkeurige index al juist is gekozen. 
                 if (((SolidColorBrush)chosenColors[randomIndex]).Color != ((SolidColorBrush)generatedColors[randomIndex]).Color)
                 {
-                    //Als dit niet het geval is, wordt gekeken of de kleur op een andere index wel voorkomt. Dit gebeurt door een for loop doorheen de index van de geheime code.
                     for (int i = 0; i < 4; i++)
                     {
-                        //Als de kleur op een andere index wel voorkomt, wordt er een hint gegeven aan de speler.
                         if (randomIndex != i && ((SolidColorBrush)chosenColors[randomIndex]).Color == ((SolidColorBrush)generatedColors[i]).Color)
-                        {     
-                            MessageBox.Show($"Hint: Kleur {generatedColors[randomIndex].ToString()} is een van de kleuren!");
-                            //De score wordt aangepast en de hintGiven wordt op true gezet zodat de while loop stopt.
+                        {
+                            Color hintColor = ((SolidColorBrush)generatedColors[randomIndex]).Color;
+                            MessageBox.Show($"Hint: Kleur {colorNames[hintColor]} is een van de kleuren!");
                             currentPlayer.Score -= 15;
                             scoreLabel.Content = "Score: " + currentPlayer.Score;
                             hintGiven = true;
-                            //De break; zorgt ervoor dat de loop stopt zodra er een hint is gegeven.
                             break;
                         }
                     }
@@ -372,13 +375,13 @@ namespace MastermindCSProject
         /// </summary>
         private void BuyHintColorLocation()
         {
-            Player currentPlayer = players[playerIndex];
+            Player currentPlayer = _players[_playerIndex];
 
             List<Brush> generatedColors = new List<Brush>
-            { new SolidColorBrush((Color)ColorConverter.ConvertFromString(color1)),
-              new SolidColorBrush((Color)ColorConverter.ConvertFromString(color2)),
-              new SolidColorBrush((Color)ColorConverter.ConvertFromString(color3)),
-              new SolidColorBrush((Color)ColorConverter.ConvertFromString(color4))
+            { new SolidColorBrush((Color)ColorConverter.ConvertFromString(_color1)),
+              new SolidColorBrush((Color)ColorConverter.ConvertFromString(_color2)),
+              new SolidColorBrush((Color)ColorConverter.ConvertFromString(_color3)),
+              new SolidColorBrush((Color)ColorConverter.ConvertFromString(_color4))
             };
 
             List<Brush> chosenColors = new List<Brush> {
@@ -386,6 +389,16 @@ namespace MastermindCSProject
                 color2Ellipse.Fill,
                 color3Ellipse.Fill,
                 color4Ellipse.Fill };
+
+            Dictionary<Color, string> colorNames = new Dictionary<Color, string>
+            {
+                { Colors.White, "White" },
+                { Colors.Red, "Red" },
+                { Colors.Blue, "Blue" },
+                { Colors.Green, "Green" },
+                { Colors.Yellow, "Yellow" },
+                { Colors.Orange, "Orange" }
+            };
 
             Random random = new Random();
             int randomIndex;
@@ -397,7 +410,8 @@ namespace MastermindCSProject
             } while (((SolidColorBrush)chosenColors[randomIndex]).Color == ((SolidColorBrush)generatedColors[randomIndex]).Color);
 
             //Als de kleur op de willekeurige index niet juist is gekozen, wordt de hint weergegeven.
-            MessageBox.Show($"Hint: Kleur {randomIndex + 1} is {generatedColors[randomIndex].ToString()}.");
+            Color hintColor = ((SolidColorBrush)generatedColors[randomIndex]).Color;
+            MessageBox.Show($"Hint: Kleur {randomIndex + 1} is {colorNames[hintColor]}.");
             currentPlayer.Score -= 25;
             scoreLabel.Content = "Score: " + currentPlayer.Score;
 
@@ -465,7 +479,7 @@ namespace MastermindCSProject
         /// <param name="e"></param>
         private void checkCodeButton_Click(object sender, RoutedEventArgs e)
         {
-            Player currentPlayer = players[playerIndex];
+            Player currentPlayer = _players[_playerIndex];
 
             //Gekozen kleuren opslaan in variabelen en in een lijst zetten.
             Brush chosenColor1, chosenColor2, chosenColor3, chosenColor4;
@@ -478,10 +492,10 @@ namespace MastermindCSProject
 
             //Omdat de gegenereerde kleuren een string zijn, moeten deze omgezet worden naar een Brush.
             List<Brush> generatedColors = new List<Brush> 
-            { new SolidColorBrush((Color)ColorConverter.ConvertFromString(color1)), 
-              new SolidColorBrush((Color)ColorConverter.ConvertFromString(color2)),
-              new SolidColorBrush((Color)ColorConverter.ConvertFromString(color3)),
-              new SolidColorBrush((Color)ColorConverter.ConvertFromString(color4))
+            { new SolidColorBrush((Color)ColorConverter.ConvertFromString(_color1)), 
+              new SolidColorBrush((Color)ColorConverter.ConvertFromString(_color2)),
+              new SolidColorBrush((Color)ColorConverter.ConvertFromString(_color3)),
+              new SolidColorBrush((Color)ColorConverter.ConvertFromString(_color4))
             };
 
             //Een nieuwe poging aanmaken en de gekozen kleuren toevoegen.
@@ -499,19 +513,25 @@ namespace MastermindCSProject
             for (int i = 0; i < 4; i++) 
             {
                 Border targetBorder = null;
+                Label targetLabel = null;
 
                 switch (i)
                 {
-                    case 0: targetBorder = color1Border;
+                    case 0:
+                        targetBorder = color1Border;
+                        targetLabel = ellipse1Label;
                         break;
                     case 1:
                         targetBorder = color2Border;
+                        targetLabel = ellipse2Label;
                         break;
                     case 2:
                         targetBorder = color3Border;
+                        targetLabel = ellipse3Label;
                         break;
                     case 3:
                         targetBorder = color4Border;
+                        targetLabel = ellipse4Label;
                         break;
                 }
 
@@ -524,11 +544,13 @@ namespace MastermindCSProject
                     {
                         targetBorder.BorderBrush = Brushes.DarkRed;
                         targetBorder.BorderThickness = new Thickness(5);
+                        targetLabel.Content = "Juiste kleur, juiste positie!";
                     }
                     else if (generatedColors.Any(gc => ((SolidColorBrush)gc).Color == ((SolidColorBrush)chosenColors[i]).Color))
                     {
                         targetBorder.BorderBrush = Brushes.Wheat;
                         targetBorder.BorderThickness = new Thickness(5);
+                        targetLabel.Content = "Juiste kleur, foute positie!";
                         currentPlayer.Score -= 1;
                         allCorrect = false;
                     }
@@ -536,6 +558,7 @@ namespace MastermindCSProject
                     {
                         targetBorder.BorderBrush = Brushes.Transparent;
                         targetBorder.BorderThickness = new Thickness(5);
+                        targetLabel.Content = "Foute kleur!";
                         currentPlayer.Score -= 2;
                         allCorrect = false;
                     }
@@ -565,21 +588,21 @@ namespace MastermindCSProject
             }
 
             //De attempt wordt toegevoegd aan een lijst, die op zijn beurt weer wordt toegevoegd aan de listbox.
-            attemptsList.Add(attempt);
+            _attemptsList.Add(attempt);
             attemptsListBox.ItemsSource = null;
-            attemptsListBox.ItemsSource = attemptsList;
+            attemptsListBox.ItemsSource = _attemptsList;
 
             //Als alle kleuren correct zijn geraden, wordt de speler gefeliciteerd en stopt de timer.
             //Dit gebeurt door de Boolean allCorrect. Als alle kleuren correct zijn, blijft deze true en wordt het spel beeindigt.
             if (allCorrect)
             {
-                highscores.Add($"Naam: {currentPlayer.Name} - Aantal pogingen: {currentPlayer.Attempts} - Score: {currentPlayer.Score}");
-                string nextPlayerName = players[(playerIndex + 1) % players.Count].Name;
+                _highscores.Add($"Naam: {currentPlayer.Name} - Aantal pogingen: {currentPlayer.Attempts} - Score: {currentPlayer.Score}");
+                string nextPlayerName = _players[(_playerIndex + 1) % _players.Count].Name;
                 MessageBox.Show($"Gefeliciteerd, {currentPlayer.Name}! Je hebt de code geraden! Score: {currentPlayer.Score} Pogingen: {currentPlayer.Attempts}\r\n Volgende speler: {nextPlayerName}", currentPlayer.Name);
                 scoreLabel.Content = "Score: 100";
                 NextPlayer();
             }
-            else if (currentPlayer.Attempts < maxAttempts && currentPlayer.Score >= 0)
+            else if (currentPlayer.Attempts < _maxAttempts && currentPlayer.Score >= 0)
             {
                 currentPlayer.Attempts++;
                 this.Title = $"Mastermind - Poging: {currentPlayer.Attempts}";
