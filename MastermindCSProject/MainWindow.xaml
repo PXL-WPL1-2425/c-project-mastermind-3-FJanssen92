@@ -32,15 +32,15 @@
 
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="5*"/>
-            <ColumnDefinition Width="3*"/>
+            <ColumnDefinition Width="16*"/>
+            <ColumnDefinition Width="9*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <DockPanel VerticalAlignment="Top" Grid.ColumnSpan="2">
+        <DockPanel VerticalAlignment="Top" Grid.ColumnSpan="2" Height="18">
             <Menu x:Name="HoofdMenu">
                 <MenuItem Header="Bestand">
                     <MenuItem x:Name="NewGame" Header="Nieuw Spel" Click="Window_Loaded">
@@ -58,32 +58,48 @@
         </DockPanel>
 
 
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,70,0,0" Grid.Column="0" Grid.Row="0">
-            <Border x:Name="color1Border" BorderBrush="Black" BorderThickness="1" CornerRadius="65" Padding="0" Margin="10">
-                <Ellipse x:Name="color1Ellipse" Height="110" Width="110" Fill="White" MouseLeftButtonDown="Ellipse_MouseLeftButtonDown"/>
-            </Border>
-            <Border x:Name="color2Border" BorderBrush="Black" BorderThickness="1" CornerRadius="65" Padding="0" Margin="10">
-                <Ellipse x:Name="color2Ellipse" Height="110" Width="110" Fill="White" MouseLeftButtonDown="Ellipse_MouseLeftButtonDown"/>
-            </Border>
-            <Border x:Name="color3Border" BorderBrush="Black" BorderThickness="1" CornerRadius="65" Padding="0" Margin="10">
-                <Ellipse x:Name="color3Ellipse" Height="110" Width="110" Fill="White" MouseLeftButtonDown="Ellipse_MouseLeftButtonDown"/>
-            </Border>
-            <Border x:Name="color4Border" BorderBrush="Black" BorderThickness="1" CornerRadius="65" Padding="0" Margin="10">
-                <Ellipse x:Name="color4Ellipse" Height="110" Width="110" Fill="White" MouseLeftButtonDown="Ellipse_MouseLeftButtonDown"/>
-            </Border>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,107,0,0" Grid.Row="0" Height="192" Width="616">
+            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Top" Margin="15">
+                <Border x:Name="color1Border" BorderBrush="Black" BorderThickness="1" CornerRadius="65" Padding="0">
+                    <Ellipse x:Name="color1Ellipse" Height="110" Width="110" Fill="White" MouseLeftButtonDown="Ellipse_MouseLeftButtonDown"/>
+                </Border>
+                <Label x:Name="ellipse1Label" Content="" Width="112" FontFamily="Impact" Foreground="White" Height="40" FontSize="10" RenderTransformOrigin="0.5,0.5">
+                    <Label.RenderTransform>
+                        <TransformGroup>
+                            <ScaleTransform/>
+                            <SkewTransform AngleX="0"/>
+                            <RotateTransform/>
+                            <TranslateTransform X="0"/>
+                        </TransformGroup>
+                    </Label.RenderTransform>
+                </Label>
+            </StackPanel>
+            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Top" Margin="15">
+                <Border x:Name="color2Border" BorderBrush="Black" BorderThickness="1" CornerRadius="65" Padding="0">
+                    <Ellipse x:Name="color2Ellipse" Height="110" Width="110" Fill="White" MouseLeftButtonDown="Ellipse_MouseLeftButtonDown"/>
+                </Border>
+                <Label x:Name="ellipse2Label" Content="" Width="112" FontFamily="Impact" Foreground="White" Height="40" FontSize="10"/>
+            </StackPanel>
+            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Top" Margin="15">
+                <Border x:Name="color3Border" BorderBrush="Black" BorderThickness="1" CornerRadius="65" Padding="0">
+                    <Ellipse x:Name="color3Ellipse" Height="110" Width="110" Fill="White" MouseLeftButtonDown="Ellipse_MouseLeftButtonDown"/>
+                </Border>
+                <Label x:Name="ellipse3Label" Content="" Width="112" FontFamily="Impact" Foreground="White" Height="40" FontSize="10"/>
+            </StackPanel>
+            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Top" Margin="15">
+                <Border x:Name="color4Border" BorderBrush="Black" BorderThickness="1" CornerRadius="65" Padding="0">
+                    <Ellipse x:Name="color4Ellipse" Height="110" Width="110" Fill="White" MouseLeftButtonDown="Ellipse_MouseLeftButtonDown"/>
+                </Border>
+                <Label x:Name="ellipse4Label" Content="" Width="112" FontFamily="Impact" Foreground="White" Height="40" FontSize="10"/>
+            </StackPanel>
         </StackPanel>
-
-        <ListBox x:Name="attemptsListBox" ItemTemplate="{StaticResource AttemptTemplate}" HorizontalAlignment="Left" Height="534" VerticalAlignment="Top" Width="340" Margin="10,30,0,0" Background="{x:Null}" Grid.Column="1" BorderBrush="White"/>
-        <Button x:Name="checkCodeButton" Content="Check code" HorizontalAlignment="Left" Margin="10,279,0,0" VerticalAlignment="Top" Width="528" Height="40" Click="checkCodeButton_Click" FontFamily="Impact" Foreground="White" FontSize="20" Background="Black"/>
-        <TextBox x:Name="secretCodeTextBox" HorizontalAlignment="Left" Margin="10,249,0,0" VerticalAlignment="Top" Width="408" Height="60" IsEnabled="False" SelectionOpacity="-1" FontSize="14" TextWrapping="Wrap" FontFamily="Impact" Visibility="Hidden"/>
-        <Label x:Name="timerLabel" Content="Timer:" HorizontalAlignment="Left" VerticalAlignment="Top" Width="350" Height="30" Foreground="White" FontFamily="Impact" FontSize="18" Margin="115,30,0,0"/>
-        <Label x:Name="scoreLabel" Content="Score: 100" HorizontalAlignment="Left" Margin="10,30,0,0" VerticalAlignment="Top" Foreground="White" FontFamily="Impact" FontSize="18"/>
-        <Label x:Name="playerNameLabel" Content="Speler: " HorizontalAlignment="Left" Margin="10,324,0,0" VerticalAlignment="Top" Width="408" Height="45" FontFamily="Impact" FontSize="18" Foreground="White" VerticalContentAlignment="Center"/>
-        <Button x:Name="buyHintButton" Content="Hint Kopen" HorizontalAlignment="Left" Margin="140,409,0,0" VerticalAlignment="Top" BorderBrush="#FF707070" Background="Black" FontFamily="Impact" FontSize="18" IsCancel="True" Foreground="White" Height="65" Width="220" Click="buyHintButton_Click"/>
-        <Label x:Name="ellipse1Label" Content="" HorizontalAlignment="Left" Margin="20,212,0,0" VerticalAlignment="Top" Width="110" FontFamily="Impact" Foreground="White" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Height="40"/>
-        <Label x:Name="ellipse2Label" Content="" HorizontalAlignment="Left" Margin="159,212,0,0" VerticalAlignment="Top" Height="40" Width="110" FontFamily="Impact" Foreground="White" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
-        <Label x:Name="ellipse3Label" Content="" HorizontalAlignment="Left" Margin="290,212,0,0" VerticalAlignment="Top" Height="40" Width="110" FontFamily="Impact" Foreground="White" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
-        <Label x:Name="ellipse4Label" Content="" HorizontalAlignment="Left" Margin="418,212,0,0" VerticalAlignment="Top" Height="40" Width="110" FontFamily="Impact" Foreground="White" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+        <ListBox x:Name="attemptsListBox" ItemTemplate="{StaticResource AttemptTemplate}" HorizontalAlignment="Left" Height="534" VerticalAlignment="Top" Width="270" Margin="80,30,0,0" Background="{x:Null}" Grid.Column="1" BorderBrush="White"/>
+        <Button x:Name="checkCodeButton" Content="Check code" HorizontalAlignment="Left" Margin="55,369,0,0" VerticalAlignment="Top" Width="492" Height="60" Click="checkCodeButton_Click" FontFamily="Impact" Foreground="White" FontSize="20" Background="Black"/>
+        <TextBox x:Name="secretCodeTextBox" HorizontalAlignment="Left" Margin="55,292,0,0" VerticalAlignment="Top" Width="492" Height="60" IsEnabled="False" SelectionOpacity="-1" FontSize="18" TextWrapping="Wrap" FontFamily="Impact" Visibility="Hidden"/>
+        <Label x:Name="timerLabel" Content="Timer:" HorizontalAlignment="Left" VerticalAlignment="Top" Width="350" Height="30" Foreground="White" FontFamily="Impact" FontSize="18" Margin="12,62,0,0"/>
+        <Label x:Name="scoreLabel" Content="Score: 100" HorizontalAlignment="Left" Margin="458,18,0,0" VerticalAlignment="Top" Foreground="White" FontFamily="Impact" FontSize="18" Height="46" Width="112" VerticalContentAlignment="Center"/>
+        <Label x:Name="playerNameLabel" Content="Speler: " HorizontalAlignment="Left" Margin="12,18,0,0" VerticalAlignment="Top" Width="228" Height="46" FontFamily="Impact" FontSize="18" Foreground="White" VerticalContentAlignment="Center"/>
+        <Button x:Name="buyHintButton" Content="Hint Kopen" HorizontalAlignment="Left" Margin="191,434,0,0" VerticalAlignment="Top" BorderBrush="#FF707070" Background="Black" FontFamily="Impact" FontSize="18" IsCancel="True" Foreground="White" Height="65" Width="220" Click="buyHintButton_Click"/>
     </Grid>
 
 </Window>
